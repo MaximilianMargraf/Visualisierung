@@ -27,16 +27,15 @@ public class Fisheye implements Layout{
 			double fishX = calcFish(view.getWidth(), fishEyeCenterX, current.getX());
 			double fishY = calcFish(view.getHeight(), fishEyeCenterY, current.getY());
 
-			// the size of each vertex depends on the vertex's size, its position in normal coordinates
-			// and the position of the focus
+			// another point that is qNorm away from the center of the vertex, away from the focus
 			double qNormX = current.getX() + current.getWidth()/2;
 			double qNormY = current.getY() + current.getHeight()/2;
 
-			 // position in fisheye mode, x and y are mapped independently
+			 // position in fisheye mode, x and y are mapped independently, which can be used as a
 			double qFishX = calcFish(view.getWidth(), fishEyeCenterX, qNormX);
 			double qFishY = calcFish(view.getHeight(), fishEyeCenterY, qNormY);
 
-			// computing the size of the vertex
+			// computing the size of the vertex, min keeps the bounding box square
 			double sGeom = 2 * Math.min(Math.abs(qFishX - fishX), Math.abs(qFishY - fishY)) * 0.05;
 
 			// edit the vertex being iterated on
