@@ -27,6 +27,11 @@ public class MouseController implements MouseListener,MouseMotionListener {
 	 private DrawingEdge drawingEdge = null;
 	 private boolean fisheyeMode;
 	 private GroupingRectangle groupRectangle;
+
+	 // checker if mouse in marker rectangle
+	 private boolean inMarker = false;
+	 private boolean inOverview = false;
+
 	/*
 	 * Getter And Setter
 	 */
@@ -52,9 +57,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int x = e.getX();
 		int y = e.getY();
 		double scale = view.getScale();
-		
-		
-		
+
 		if (e.getButton() == MouseEvent.BUTTON3){
 			/*
 			 * add grouped elements to the model
@@ -78,7 +81,6 @@ public class MouseController implements MouseListener,MouseMotionListener {
 			}
 			model.removeEdges(edgesToRemove);
 			model.removeElement(groupVertex);
-			
 		}
 	}
 
@@ -91,8 +93,25 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int x = e.getX();
 		int y = e.getY();
 		double scale = view.getScale();
-		
-	   
+
+		// marker scaled position, with 0.25 we constant speed
+		int x_scale = (int) (x / 0.25);
+		int y_scale = (int) (y / 0.25);
+
+		// check if the mouse is in the marker area
+		if (view.markerContains(x_scale, y_scale)) {
+			inMarker = true;
+		} else {
+			inMarker = false;
+		}
+
+		// check if the mouse is in the overview area
+		if (view.overviewContains(x_scale, y_scale)) {
+			inOverview = true;
+		} else {
+			inOverview = false;
+		}
+
 	   if (edgeDrawMode){
 			drawingEdge = new DrawingEdge((Vertex)getElementContainingPosition(x/scale,y/scale));
 			model.addElement(drawingEdge);
@@ -181,6 +200,14 @@ public class MouseController implements MouseListener,MouseMotionListener {
 			drawingEdge.setY(e.getY());
 		}else if(selectedElement != null){
 			selectedElement.updatePosition((e.getX()-mouseOffsetX)/scale, (e.getY()-mouseOffsetY) /scale);
+			int x_offset = (int) ((e.getX()-mouseOffsetX) / 0.25);
+			int y_offset = (int) ((e.getY()-mouseOffsetY) / 0.25);
+			// if we are dragging and are in the marker rectangle
+			if (inMarker) {
+				// forward position into the view to adjust g2D
+
+				view.updateTranslation(x_offset, y_offset);
+			}
 		}
 		view.repaint();
 	}
