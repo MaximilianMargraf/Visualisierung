@@ -1,8 +1,9 @@
 package infovis.paracoords;
 
+import infovis.scatterplot.Data;
 import infovis.scatterplot.Model;
 
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -10,7 +11,8 @@ import java.awt.event.MouseMotionListener;
 public class MouseController implements MouseListener, MouseMotionListener {
 	private View view = null;
 	private Model model = null;
-	Shape currentShape = null;
+	private int x = 0;
+	private int y = 0;
 	
 	public void mouseClicked(MouseEvent e) {
 		
@@ -25,15 +27,23 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	}
 
 	public void mousePressed(MouseEvent e) {
-
+		x = e.getX();
+		y = e.getY();
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		int xl = e.getX();
+		int yl = e.getY();
 
+		view.getMarkerRectangle().setRect(x, y, xl-x, yl-y);
+
+		view.repaint();
+		for (Data d: model.getList()) {
+			d.setColor(Color.BLACK);
+		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
-
 	}
 
 	public void mouseMoved(MouseEvent e) {

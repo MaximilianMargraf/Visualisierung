@@ -8,6 +8,7 @@ import infovis.diagram.elements.GroupingRectangle;
 import infovis.diagram.elements.None;
 import infovis.diagram.elements.Vertex;
 import infovis.diagram.layout.Fisheye;
+import infovis.diagram.layout.Layout;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -30,7 +31,9 @@ public class MouseController implements MouseListener,MouseMotionListener {
 
 	 // checker if mouse in marker rectangle
 	 private boolean inMarker = false;
-	 private boolean inOverview = false;
+
+	 // fisheye instance
+	 private Layout fisheye = new Fisheye();
 
 	/*
 	 * Getter And Setter
@@ -95,6 +98,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		double scale = view.getScale();
 
 		// marker scaled position, with 0.25 we constant speed
+		// this has to be 0.25 just like the g2D is 1/4 of the original size
 		int x_scale = (int) (x / 0.25);
 		int y_scale = (int) (y / 0.25);
 
@@ -103,13 +107,6 @@ public class MouseController implements MouseListener,MouseMotionListener {
 			inMarker = true;
 		} else {
 			inMarker = false;
-		}
-
-		// check if the mouse is in the overview area
-		if (view.overviewContains(x_scale, y_scale)) {
-			inOverview = true;
-		} else {
-			inOverview = false;
 		}
 
 	   if (edgeDrawMode){
@@ -191,9 +188,10 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		 * Aufgabe 1.2
 		 */
 		if (fisheyeMode){
-			/*
-			 * handle fisheye mode interactions
-			 */
+			Model reset = new Model();
+			reset.generateTestValues();
+			view.setModel(reset);
+			fisheye.setMouseCoords(e.getX(), e.getY(), view);
 			view.repaint();
 		} else if (edgeDrawMode){
 			drawingEdge.setX(e.getX());
@@ -205,7 +203,6 @@ public class MouseController implements MouseListener,MouseMotionListener {
 			// if we are dragging and are in the marker rectangle
 			if (inMarker) {
 				// forward position into the view to adjust g2D
-
 				view.updateTranslation(x_offset, y_offset);
 			}
 		}
@@ -224,9 +221,6 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		fisheyeMode = b;
 		if (b){
 			Debug.p("new Fisheye Layout");
-			/*
-			 * handle fish eye initial call
-			 */
 			view.repaint();
 		} else {
 			Debug.p("new Normal Layout");

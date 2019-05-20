@@ -18,6 +18,7 @@ public class View extends JPanel{
 	private final static int  MAX_WIDTH  = 800;
 	private final static int MAX_HEIGHT = 720;
 
+	// position of overview rectangle
 	private int markerPosX = 0;
 	private int markerPosY = 0;
 
@@ -54,7 +55,8 @@ public class View extends JPanel{
 		g2D.translate(-translateX, -translateY);
 		// paint the scene like it is
 		paintDiagram(g2D);
-		//move the object back for the overview rectangle
+
+		// move g2D back so that the overview window stays at 0, 0
 		g2D.translate(translateX, translateY);
 
 		// paint the Overview diagram
@@ -73,7 +75,7 @@ public class View extends JPanel{
 	private void drawOverview(Graphics2D g2D){
 		// adjust size of graphic object for the overview. This window will be 1/4 the size of the normal scene
 		g2D.scale(0.25 / getScale(), 0.25/getScale());
-		// size of the rectangle equals the resized graphic object
+		// size of the rectangle is set to values
 		overviewRect.setRect(0,0, MAX_WIDTH, MAX_HEIGHT);
 		// clean area over/under the rectangle
 		g2D.clearRect(0,0, MAX_WIDTH, MAX_HEIGHT);
@@ -86,7 +88,6 @@ public class View extends JPanel{
 
 		// set marker rectangle (current view)
 		g2D.setColor(Color.RED);
-		updateMarker(markerPosX, markerPosY, getScale());
 		g2D.draw((marker));
 	}
 	
@@ -96,15 +97,11 @@ public class View extends JPanel{
 	public double getScale(){
 		return scale;
 	}
-	public double getTranslateX() {
-		return translateX;
-	}
+
 	public void setTranslateX(double translateX) {
 		this.translateX = translateX;
 	}
-	public double getTranslateY() {
-		return translateY;
-	}
+
 	public void setTranslateY(double tansslateY) {
 		this.translateY = tansslateY;
 	}
@@ -114,44 +111,32 @@ public class View extends JPanel{
 	}
 
 	public void updateMarker(int x, int y, double scale) {
+		// adjust height of marker to the resized g2D object
 		double width  = getWidth() / scale;
 		double height = getHeight() / scale;
 		markerPosX = x;
 		markerPosY = y;
-		//translate = true;
 
+		// only move the marker in the overview rectangle
 		if(x + width > MAX_WIDTH) {
 			x = MAX_WIDTH - (int) width;
 		}
 		if(y + height > MAX_HEIGHT) {
 			y = MAX_HEIGHT - (int) height;
 		}
-		// stop the marker from going off stream.
+		// stop the marker from going off screen
 		if(x < 0){
 			x = 0;
 		}
 		if(y < 0){
 			y = 0;
 		}
-		marker.setRect(x, y, width, height); // 16, 10
+		marker.setRect(x, y, width, height);
 	}
 
-	public void updateOverview(Graphics2D g2D) {
-		g2D.translate(translateX, translateY);
-		drawOverview(g2D);
-		g2D.translate(-translateX, -translateY);
-	}
-
-	public Rectangle2D getMarker(){
-		return marker;
-	}
-
+	// check if the
 	public boolean markerContains(int x, int y){
 		return marker.contains(x, y);
-	}
-
-	public boolean overviewContains(int x, int y){
-		return overviewRect.contains(x, y);
 	}
 }
  

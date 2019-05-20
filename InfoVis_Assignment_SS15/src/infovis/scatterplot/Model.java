@@ -97,21 +97,6 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		for (String l : labels) {
-//			Debug.print(l);
-//			Debug.print(",  ");
-//			Debug.println("");
-//		}
-//		for (Range range : ranges) {
-//			Debug.print(range.toString());
-//			Debug.print(",  ");
-//			Debug.println("");
-//		}
-//		for (Data d : list) {
-//			Debug.print(d.toString());
-//			Debug.println("");
-//		}
-		
 	}
     
 }
