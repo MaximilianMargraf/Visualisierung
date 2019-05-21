@@ -188,15 +188,23 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		 * Aufgabe 1.2
 		 */
 		if (fisheyeMode){
+			// new model so the old one stays untouched
 			Model reset = new Model();
+			// introduce already known points
 			reset.generateTestValues();
+			// set active model to the fisheye view
 			view.setModel(reset);
+			// start the fisheye transformation
 			fisheye.setMouseCoords(e.getX(), e.getY(), view);
+			// refresh window
 			view.repaint();
-		} else if (edgeDrawMode){
+
+		}
+		else if (edgeDrawMode){
 			drawingEdge.setX(e.getX());
 			drawingEdge.setY(e.getY());
-		}else if(selectedElement != null){
+		}
+		else if(selectedElement != null){
 			selectedElement.updatePosition((e.getX()-mouseOffsetX)/scale, (e.getY()-mouseOffsetY) /scale);
 			int x_offset = (int) ((e.getX()-mouseOffsetX) / 0.25);
 			int y_offset = (int) ((e.getY()-mouseOffsetY) / 0.25);

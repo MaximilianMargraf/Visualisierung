@@ -23,7 +23,8 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseExited(MouseEvent e) {
-
+		view.getMarkerRectangle().setRect(0,0,0,0);
+		view.repaint();
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -35,15 +36,21 @@ public class MouseController implements MouseListener, MouseMotionListener {
 		int xl = e.getX();
 		int yl = e.getY();
 
-		view.getMarkerRectangle().setRect(x, y, xl-x, yl-y);
-
+		view.getMarkerRectangle().setRect(0,0,0,0);
 		view.repaint();
-		for (Data d: model.getList()) {
-			d.setColor(Color.BLACK);
-		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
+		int xl = e.getX();
+		int yl = e.getY();
+
+		view.getMarkerRectangle().setRect(x, y, xl-x, yl-y);
+
+		view.repaint();
+		// set models back to normal for next rectangle
+		for (Data d: model.getList()) {
+			d.setColor(Color.BLACK);
+		}
 	}
 
 	public void mouseMoved(MouseEvent e) {

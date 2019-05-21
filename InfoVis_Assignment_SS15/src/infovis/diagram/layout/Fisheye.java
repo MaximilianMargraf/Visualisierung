@@ -24,6 +24,7 @@ public class Fisheye implements Layout{
 
 			// each vertex gets an individual position in the fisheye view, depending on its position in
 			// normal coordinates and the position of the focus
+			//pFishX und pFishY
 			double fishX = calcFish(view.getWidth(), fishEyeCenterX, current.getX());
 			double fishY = calcFish(view.getHeight(), fishEyeCenterY, current.getY());
 

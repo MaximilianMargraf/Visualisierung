@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class View extends JPanel {
+	public boolean selectionActive = false;
 	private Model model = null;
 	private static final int LINELENGTH = 500;
 	private static final int LINEDISTANCE = 150;
@@ -25,6 +26,8 @@ public class View extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2D = (Graphics2D) g;
+		g2D.clearRect(0, 0, getWidth(), getHeight());
+		g2D.draw(markerRectangle);
 
 		int amount_labels = model.getLabels().size();
 		ArrayList<String> labels = model.getLabels();
@@ -84,6 +87,7 @@ public class View extends JPanel {
 				g2D.setColor(Color.BLACK);
 			}
 		}
+		// color selected lines red
 		for(int i = 0; i < lines.size(); ++i) {
 			if(markerRectangle.intersectsLine(lines.get(i))){
 				data.get(i % data.size()).setColor(Color.RED);
